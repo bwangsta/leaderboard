@@ -6,25 +6,27 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom"
-import Home, { loader as homeLoader } from "./pages/home/Home.tsx"
+import Home from "./pages/home/Home.tsx"
 import Players, {
   loader as playersLoader,
   action as playersAction,
 } from "./pages/players/Players.tsx"
 import Error from "./pages/error/Error.tsx"
 import Layout from "./components/Layout.tsx"
+import Games, { loader as gamesLoader } from "./pages/games/Games.tsx"
 import "./index.css"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Layout />} errorElement={<Error />}>
-      <Route path="/" index element={<Home />} loader={homeLoader} />
+      <Route path="/" index element={<Home />} />
       <Route
         path="/players"
         element={<Players />}
         loader={playersLoader}
         action={playersAction}
       />
+      <Route path="/games" element={<Games />} loader={gamesLoader} />
     </Route>
   )
 )

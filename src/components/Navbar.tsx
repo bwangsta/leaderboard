@@ -3,21 +3,12 @@ import { Link } from "react-router-dom"
 function Navbar() {
   return (
     <nav className="bg-slate-900 p-4">
-      <ul className="flex justify-between font-semibold">
-        <li>
+      <ul className="flex gap-4 font-semibold">
+        <li className="mr-auto">
           <Link to={"/"}>Leaderboard</Link>
         </li>
         <li>
-          <Link to={"/players"}>Catan</Link>
-        </li>
-        <li>
-          <Link to={"/players"}>Ticket To Ride</Link>
-        </li>
-        <li>
-          <Link to={"/players"}>Mahjong</Link>
-        </li>
-        <li>
-          <Link to={"/players"}>Bang!</Link>
+          <Link to={"/games"}>Games</Link>
         </li>
         <li>
           <Link to={"/players"}>Players</Link>
