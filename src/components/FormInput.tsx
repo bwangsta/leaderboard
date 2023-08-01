@@ -17,7 +17,7 @@ function FormInput({ name }: FormInputProps) {
         id={name}
         type="text"
         name={name}
-        className="rounded-lg inline-block w-full focus:outline-none px-2 py-1"
+        className="inline-block w-full rounded-lg px-2 py-1 text-black focus:outline-none"
       />
     </div>
   )

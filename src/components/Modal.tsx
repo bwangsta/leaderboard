@@ -27,7 +27,7 @@ function Modal({ children, modalRef }: ModalProps) {
     <dialog
       ref={modalRef}
       onClick={handleCloseModal}
-      className="rounded-3xl w-full max-w-sm bg-slate-500 backdrop:bg-black backdrop:bg-opacity-60 backdrop:backdrop-blur"
+      className="rounded-3xl w-full max-w-sm bg-slate-800 text-inherit caret-black backdrop:bg-black backdrop:bg-opacity-60 backdrop:backdrop-blur"
     >
       {children}
     </dialog>

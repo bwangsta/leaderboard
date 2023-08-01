@@ -34,7 +34,7 @@ function Home() {
 
   return (
     <div className="p-4">
-      <table className="table-auto w-full max-w-7xl mx-auto border-collapse">
+      <table className="mx-auto w-full max-w-7xl table-auto border-collapse">
         <thead className="text-left">
           <tr>
             <th>#</th>

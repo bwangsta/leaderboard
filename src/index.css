@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --foreground-rgb: 250, 250, 250;
+  --background-rgb: 30, 41, 59;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  height: 100vh;
+  height: 100dvh;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+}

@@ -41,13 +41,15 @@ function Players() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold">Players</h1>
-      <button
-        className="bg-blue-400 px-2 py-1 rounded-lg"
-        onClick={() => modalRef.current?.showModal()}
-      >
-        Add Player
-      </button>
+      <div className="flex justify-between">
+        <h1 className="text-3xl font-bold">Players</h1>
+        <button
+          className="rounded-lg bg-blue-400 px-2 py-1"
+          onClick={() => modalRef.current?.showModal()}
+        >
+          Add Player
+        </button>
+      </div>
       <Modal modalRef={modalRef}>
         <AddPlayer />
       </Modal>
