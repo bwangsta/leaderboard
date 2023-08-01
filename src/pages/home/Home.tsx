@@ -33,7 +33,7 @@ function Home() {
   const games = useLoaderData() as Game[]
 
   return (
-    <div className="p-4">
+    <div className="overflow-x-auto p-4">
       <table className="mx-auto w-full max-w-7xl table-auto border-collapse">
         <thead className="text-left">
           <tr>
