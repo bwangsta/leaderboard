@@ -19,3 +19,7 @@ body {
   flex-direction: column;
   height: inherit;
 }
+
+td {
+  padding: 0.5rem;
+}

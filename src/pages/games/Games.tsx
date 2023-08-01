@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router-dom"
+import Table from "../../components/Table"
 
 type Game = {
   _id: string
@@ -31,41 +32,33 @@ function formatDate(date: string) {
 
 function Games() {
   const games = useLoaderData() as Game[]
+  const headers = ["#", "Date", "Game", "Players", "Winners"]
+
   return (
-    <div className="overflow-x-auto p-4">
-      <table className="mx-auto w-full max-w-7xl table-auto border-collapse text-left">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Game</th>
-            <th>Players</th>
-            <th>Winners</th>
-          </tr>
-        </thead>
-        <tbody>
-          {games.map((game, index) => {
-            return (
-              <tr key={game._id}>
-                <td>{index + 1}</td>
-                <td>{formatDate(game.date)}</td>
-                <td>{game.name}</td>
-                <td>
-                  {game.players.map((player) => {
-                    return <p key={player._id}>{player.username}</p>
-                  })}
-                </td>
-                <td>
-                  {game.winners.map((winner) => {
-                    return <p key={winner}>{winner}</p>
-                  })}
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <h1 className="my-4 text-3xl font-bold">All Games</h1>
+      <Table headers={headers}>
+        {games.map((game, index) => {
+          return (
+            <tr key={game._id}>
+              <td>{index + 1}</td>
+              <td>{formatDate(game.date)}</td>
+              <td>{game.name}</td>
+              <td>
+                {game.players.map((player) => {
+                  return <p key={player._id}>{player.username}</p>
+                })}
+              </td>
+              <td>
+                {game.winners.map((winner) => {
+                  return <p key={winner}>{winner}</p>
+                })}
+              </td>
+            </tr>
+          )
+        })}
+      </Table>
+    </>
   )
 }
 
