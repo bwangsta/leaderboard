@@ -6,7 +6,7 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom"
-import Home from "./pages/home/Home.tsx"
+import Home, { loader as homeLoader } from "./pages/home/Home.tsx"
 import Players, {
   loader as playersLoader,
   action as playersAction,
@@ -19,7 +19,7 @@ import "./index.css"
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Layout />} errorElement={<Error />}>
-      <Route path="/" index element={<Home />} />
+      <Route path="/" index element={<Home />} loader={homeLoader} />
       <Route
         path="/players"
         element={<Players />}

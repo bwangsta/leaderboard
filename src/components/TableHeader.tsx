@@ -4,10 +4,10 @@ type TableHeaderProps = {
 
 function TableHeader({ headers }: TableHeaderProps) {
   return (
-    <thead>
+    <thead className="bg-slate-900">
       <tr className="text-lg font-bold">
         {headers.map((header) => {
-          return <td key={header as React.Key}>{header}</td>
+          return <th key={header as React.Key}>{header}</th>
         })}
       </tr>
     </thead>
