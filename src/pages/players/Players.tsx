@@ -2,12 +2,8 @@ import { useRef } from "react"
 import { useLoaderData, redirect } from "react-router-dom"
 import Modal from "../../components/Modal"
 import AddPlayer from "./AddPlayer"
-
-type Player = {
-  username: string
-  first_name: string
-  last_name: string
-}
+import Table from "../../components/Table"
+import { Player } from "../../types"
 
 export function loader() {
   const data = fetch("http://localhost:8080/players")
@@ -38,26 +34,45 @@ export async function action({ request }: { request: Request }) {
 function Players() {
   const players = useLoaderData() as Player[]
   const modalRef = useRef<HTMLDialogElement>(null)
+  const playerHeaders = [
+    "#",
+    "Username",
+    "Wins",
+    "Losses",
+    "Played",
+    "Win Rate",
+  ]
 
   return (
     <>
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold">Players</h1>
-        <button
-          className="rounded-lg bg-blue-400 px-2 py-1"
-          onClick={() => modalRef.current?.showModal()}
-        >
-          Add Player
-        </button>
-      </div>
+      <button
+        className="mt-4 rounded-md bg-blue-400 px-4 py-2 text-lg"
+        onClick={() => modalRef.current?.showModal()}
+      >
+        Add Player
+      </button>
       <Modal modalRef={modalRef}>
         <AddPlayer />
       </Modal>
-      <ul>
-        {players.map((player) => {
-          return <li key={player.username}>{player.username}</li>
+      <Table title="All Players" headers={playerHeaders}>
+        {players.map((player, index) => {
+          return (
+            <tr key={player._id} className="odd:bg-slate-700 even:bg-slate-900">
+              <td>{index + 1}</td>
+              <td>{player.username}</td>
+              <td>{player.wins}</td>
+              <td>{player.played - player.wins}</td>
+              <td>{player.played}</td>
+              <td>
+                {player.played === 0
+                  ? "0.00"
+                  : ((player.wins / player.played) * 100).toFixed(2)}
+                %
+              </td>
+            </tr>
+          )
         })}
-      </ul>
+      </Table>
     </>
   )
 }
