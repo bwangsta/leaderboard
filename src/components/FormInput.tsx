@@ -1,8 +1,18 @@
 type FormInputProps = {
   name: string
+  type: string
+  value?: string
+  handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
-function FormInput({ name }: FormInputProps) {
+function FormInput({
+  name,
+  type,
+  value,
+  handleChange,
+  handleKeyDown,
+}: FormInputProps) {
   const words = name.split("_")
   const formattedName = words
     .map((word) => {
@@ -15,8 +25,11 @@ function FormInput({ name }: FormInputProps) {
       <label htmlFor={name}>{formattedName}</label>
       <input
         id={name}
-        type="text"
+        type={type}
         name={name}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
         className="inline-block w-full rounded-lg px-2 py-1 text-black focus:outline-none"
       />
     </div>

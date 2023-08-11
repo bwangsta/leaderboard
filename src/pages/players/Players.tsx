@@ -52,7 +52,7 @@ function Players() {
         Add Player
       </button>
       <Modal modalRef={modalRef}>
-        <AddPlayer />
+        <AddPlayer modalRef={modalRef} />
       </Modal>
       <Table title="All Players" headers={playerHeaders}>
         {players.map((player, index) => {
