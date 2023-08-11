@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { useLoaderData, redirect } from "react-router-dom"
+import { useLoaderData } from "react-router-dom"
 import Modal from "../../components/Modal"
 import AddPlayer from "./AddPlayer"
 import Table from "../../components/Table"
@@ -12,23 +12,6 @@ export function loader() {
     .catch((err) => console.log(err))
 
   return data
-}
-
-export async function action({ request }: { request: Request }) {
-  const formData = await request.formData()
-  const form = Object.fromEntries(formData)
-  try {
-    await fetch("http://localhost:8080/players", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    })
-  } catch (err) {
-    console.log(err)
-  }
-  return redirect("/players")
 }
 
 function Players() {
