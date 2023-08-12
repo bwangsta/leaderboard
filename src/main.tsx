@@ -11,6 +11,7 @@ import Players, { loader as playersLoader } from "./pages/players/Players.tsx"
 import Error from "./pages/error/Error.tsx"
 import Layout from "./components/Layout.tsx"
 import Matches, { loader as matchesLoader } from "./pages/matches/Matches.tsx"
+import GamePage, { loader as gameLoader } from "./pages/games/GamePage.tsx"
 import "./index.css"
 
 const router = createBrowserRouter(
@@ -19,6 +20,11 @@ const router = createBrowserRouter(
       <Route path="/" index element={<Home />} loader={homeLoader} />
       <Route path="/players" element={<Players />} loader={playersLoader} />
       <Route path="/matches" element={<Matches />} loader={matchesLoader} />
+      <Route
+        path="/games/:gameName"
+        element={<GamePage />}
+        loader={gameLoader}
+      />
     </Route>
   )
 )

@@ -4,6 +4,7 @@ import Table from "../../components/Table"
 import { formatDate, formatPlayers } from "../../utils/formatter"
 import { getMatches, getPlayers } from "../../services/api"
 import GameItem from "./GameItem"
+import sortRankings from "../../utils/sortRankings"
 
 export async function loader() {
   const data = await Promise.all([getMatches(), getPlayers()])
@@ -12,7 +13,6 @@ export async function loader() {
 
 function Home() {
   const [matches, players] = useLoaderData() as [Match[], Player[]]
-  players.sort((a, b) => b.wins - a.wins)
   const playerHeaders = ["Rank", "Username", "Wins", "Losses", "Win Rate"]
   const matchHeaders = ["#", "Date", "Game", "Players", "Winners"]
   const catan = matches.filter((match) => match.game === "Catan")
@@ -21,22 +21,24 @@ function Home() {
   const mahjong = matches.filter((match) => match.game === "Mahjong")
   const games = [
     {
-      name: "Bang!",
+      name: "bang",
       game: bang,
     },
     {
-      name: "Catan",
+      name: "catan",
       game: catan,
     },
     {
-      name: "Ticket To Ride",
+      name: "ticket-to-ride",
       game: ticket,
     },
     {
-      name: "Mahjong",
+      name: "mahjong",
       game: mahjong,
     },
   ]
+
+  sortRankings(players)
 
   return (
     <>

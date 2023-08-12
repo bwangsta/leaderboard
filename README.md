@@ -95,10 +95,11 @@ WIP
 
 ## Roadmap
 
-- [ ] Build game form to add new game
+- [x] Build add new match form
+- [ ] Build accordion
 - [ ] Add form validation
 - [ ] Add pagination
-- [ ] Add feature to edit and delete games and players
+- [ ] Add feature to edit and delete matches and players
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
