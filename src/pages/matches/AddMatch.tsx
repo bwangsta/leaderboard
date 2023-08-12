@@ -2,16 +2,15 @@ import { useState } from "react"
 import Select, { ActionMeta, SingleValue, MultiValue } from "react-select"
 import FormInput from "../../components/FormInput"
 import { Player } from "../../types"
-import { useNavigate } from "react-router-dom"
 
-type AddGameProps = {
+type AddMatchProps = {
   players: Player[]
   modalRef: React.RefObject<HTMLDialogElement>
 }
 
 type FormData = {
   date: Date
-  name: Option
+  game: Option
   players: Option[]
   winners: Option[]
 }
@@ -21,12 +20,11 @@ type Option = {
   label: string
 }
 
-function AddGame({ players, modalRef }: AddGameProps) {
+function AddMatch({ players, modalRef }: AddMatchProps) {
   const games = ["Bang", "Catan", "Ticket to Ride", "Mahjong"]
-  const navigate = useNavigate()
   const [formData, setFormData] = useState<FormData>({
     date: new Date(),
-    name: {} as Option,
+    game: {} as Option,
     players: [],
     winners: [],
   })
@@ -47,14 +45,14 @@ function AddGame({ players, modalRef }: AddGameProps) {
     const winners = formData.winners.map(({ value }) => value)
     const formattedFormData = {
       date: formData.date,
-      name: formData.name.value,
+      game: formData.game.value,
       players: selectedPlayers,
       winners: winners,
     }
 
-    async function postGame() {
+    async function postMatch() {
       try {
-        await fetch("http://localhost:8080/games", {
+        await fetch("http://localhost:8080/matches", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -89,14 +87,12 @@ function AddGame({ players, modalRef }: AddGameProps) {
 
     setFormData({
       date: new Date(),
-      name: {} as Option,
+      game: {} as Option,
       players: [],
       winners: [],
     })
 
-    await Promise.all([postGame(), updatePlayers()])
-
-    navigate("/games")
+    await Promise.all([postMatch(), updatePlayers()])
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -118,7 +114,7 @@ function AddGame({ players, modalRef }: AddGameProps) {
 
   return (
     <>
-      <h1 className="text-3xl font-bold">Add Game</h1>
+      <h1 className="text-3xl font-bold">Add Match</h1>
       <form className="space-y-2" onSubmit={handleSubmit}>
         <FormInput
           type="date"
@@ -127,10 +123,10 @@ function AddGame({ players, modalRef }: AddGameProps) {
           handleChange={handleInputChange}
           handleKeyDown={(e) => e.preventDefault()}
         />
-        <label htmlFor="name">Name</label>
+        <label htmlFor="game">Game</label>
         <Select
-          id="name"
-          name="name"
+          id="game"
+          name="game"
           options={gameOptions}
           isSearchable={true}
           menuPosition="fixed"
@@ -164,6 +160,7 @@ function AddGame({ players, modalRef }: AddGameProps) {
           <button
             type="button"
             className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
+            formMethod="dialog"
             onClick={() => modalRef.current?.close()}
           >
             Cancel
@@ -180,4 +177,4 @@ function AddGame({ players, modalRef }: AddGameProps) {
   )
 }
 
-export default AddGame
+export default AddMatch

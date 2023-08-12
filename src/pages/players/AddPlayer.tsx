@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import FormInput from "../../components/FormInput"
 
 type AddPlayerProps = {
@@ -13,7 +12,6 @@ type FormData = {
 }
 
 function AddPlayer({ modalRef }: AddPlayerProps) {
-  const navigate = useNavigate()
   const [formData, setFormData] = useState<FormData>({
     username: "",
     first_name: "",
@@ -44,8 +42,6 @@ function AddPlayer({ modalRef }: AddPlayerProps) {
       first_name: "",
       last_name: "",
     })
-
-    navigate("/players")
   }
 
   return (

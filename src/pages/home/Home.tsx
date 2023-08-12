@@ -1,43 +1,25 @@
 import { useLoaderData } from "react-router-dom"
-import { Game, Player } from "../../types"
+import { Match, Player } from "../../types"
 import Table from "../../components/Table"
 import { formatDate, formatPlayers } from "../../utils/formatter"
+import { getMatches, getPlayers } from "../../services/api"
 import GameItem from "./GameItem"
 
 export async function loader() {
-  async function getGames() {
-    try {
-      const response = await fetch("http://localhost:8080/games")
-      const data = await response.json()
-      return data
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  async function getPlayers() {
-    try {
-      const response = await fetch("http://localhost:8080/players")
-      const data = await response.json()
-      return data
-    } catch (err) {
-      console.log(err)
-    }
-  }
-  const data = await Promise.all([getGames(), getPlayers()])
+  const data = await Promise.all([getMatches(), getPlayers()])
   return data
 }
 
 function Home() {
-  const [games, players] = useLoaderData() as [Game[], Player[]]
+  const [matches, players] = useLoaderData() as [Match[], Player[]]
   players.sort((a, b) => b.wins - a.wins)
   const playerHeaders = ["Rank", "Username", "Wins", "Losses", "Win Rate"]
-  const gameHeaders = ["#", "Date", "Game", "Players", "Winners"]
-  const catan = games.filter((game) => game.name === "Catan")
-  const ticket = games.filter((game) => game.name === "Ticket To Ride")
-  const bang = games.filter((game) => game.name === "Bang")
-  const mahjong = games.filter((game) => game.name === "Mahjong")
-  const gameNames = [
+  const matchHeaders = ["#", "Date", "Game", "Players", "Winners"]
+  const catan = matches.filter((match) => match.game === "Catan")
+  const ticket = matches.filter((match) => match.game === "Ticket To Ride")
+  const bang = matches.filter((match) => match.game === "Bang")
+  const mahjong = matches.filter((match) => match.game === "Mahjong")
+  const games = [
     {
       name: "Bang!",
       game: bang,
@@ -59,8 +41,8 @@ function Home() {
   return (
     <>
       <div className="mt-4 grid grid-cols-fluid gap-4">
-        {gameNames.map(({ name, game }) => {
-          return <GameItem key={name} name={name} games={game} />
+        {games.map(({ name, game }) => {
+          return <GameItem key={name} name={name} matches={game} />
         })}
       </div>
       <Table title="Player Rankings" headers={playerHeaders}>
@@ -81,18 +63,18 @@ function Home() {
           )
         })}
       </Table>
-      <Table title="Recent Games" headers={gameHeaders}>
-        {games.map((game, index) => {
+      <Table title="Recent Matches" headers={matchHeaders}>
+        {matches.map((match, index) => {
           return (
-            <tr key={game._id} className="odd:bg-slate-700 even:bg-slate-900">
+            <tr key={match._id} className="odd:bg-slate-700 even:bg-slate-900">
               <td>{index + 1}</td>
-              <td>{formatDate(game.date)}</td>
-              <td>{game.name}</td>
+              <td>{formatDate(match.date)}</td>
+              <td>{match.game}</td>
               <td>
-                <p>{formatPlayers(game.players)}</p>
+                <p>{formatPlayers(match.players)}</p>
               </td>
               <td>
-                {game.winners.map((winner) => {
+                {match.winners.map((winner) => {
                   return <p key={winner._id}>{winner.username}</p>
                 })}
               </td>

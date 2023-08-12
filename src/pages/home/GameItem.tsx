@@ -1,14 +1,14 @@
-import { Game } from "../../types"
+import { Match } from "../../types"
 
 type GameItemProps = {
   name: string
-  games: Game[]
+  matches: Match[]
 }
 
-function GameItem({ name, games }: GameItemProps) {
+function GameItem({ name, matches }: GameItemProps) {
   const playerStats: { [key: string]: number } = {}
-  for (let game of games) {
-    for (let { player } of game.players)
+  for (let match of matches) {
+    for (let { player } of match.players)
       if (player.username in playerStats) {
         playerStats[player.username] += 1
       } else {

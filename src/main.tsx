@@ -10,7 +10,7 @@ import Home, { loader as homeLoader } from "./pages/home/Home.tsx"
 import Players, { loader as playersLoader } from "./pages/players/Players.tsx"
 import Error from "./pages/error/Error.tsx"
 import Layout from "./components/Layout.tsx"
-import Games, { loader as gamesLoader } from "./pages/games/Games.tsx"
+import Matches, { loader as matchesLoader } from "./pages/matches/Matches.tsx"
 import "./index.css"
 
 const router = createBrowserRouter(
@@ -18,7 +18,7 @@ const router = createBrowserRouter(
     <Route element={<Layout />} errorElement={<Error />}>
       <Route path="/" index element={<Home />} loader={homeLoader} />
       <Route path="/players" element={<Players />} loader={playersLoader} />
-      <Route path="/games" element={<Games />} loader={gamesLoader} />
+      <Route path="/matches" element={<Matches />} loader={matchesLoader} />
     </Route>
   )
 )

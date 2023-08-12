@@ -1,7 +1,7 @@
-export type Game = {
+export type Match = {
   _id: string
   date: string
-  name: string
+  game: string
   last_name: string
   players: PlayerInfo[]
   winners: Player[]

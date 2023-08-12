@@ -8,7 +8,7 @@ function Navbar() {
           <Link to={"/"}>Leaderboard</Link>
         </li>
         <li>
-          <Link to={"/games"}>Games</Link>
+          <Link to={"/matches"}>Matches</Link>
         </li>
         <li>
           <Link to={"/players"}>Players</Link>
