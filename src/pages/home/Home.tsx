@@ -1,10 +1,10 @@
 import { useLoaderData } from "react-router-dom"
 import { Match, Player } from "../../types"
 import Table from "../../components/Table"
-import { formatDate, formatPlayers } from "../../utils/formatter"
 import { getMatches, getPlayers } from "../../services/api"
 import GameItem from "./GameItem"
 import sortRankings from "../../utils/sortRankings"
+import AccordionPanel from "../../components/AccordionPanel"
 
 export async function loader() {
   const data = await Promise.all([getMatches(), getPlayers()])
@@ -14,7 +14,6 @@ export async function loader() {
 function Home() {
   const [matches, players] = useLoaderData() as [Match[], Player[]]
   const playerHeaders = ["Rank", "Username", "Wins", "Losses", "Win Rate"]
-  const matchHeaders = ["#", "Date", "Game", "Players", "Winners"]
   const catan = matches.filter((match) => match.game === "Catan")
   const ticket = matches.filter((match) => match.game === "Ticket To Ride")
   const bang = matches.filter((match) => match.game === "Bang")
@@ -65,25 +64,11 @@ function Home() {
           )
         })}
       </Table>
-      <Table title="Recent Matches" headers={matchHeaders}>
-        {matches.map((match, index) => {
-          return (
-            <tr key={match._id} className="odd:bg-slate-700 even:bg-slate-900">
-              <td>{index + 1}</td>
-              <td>{formatDate(match.date)}</td>
-              <td>{match.game}</td>
-              <td>
-                <p>{formatPlayers(match.players)}</p>
-              </td>
-              <td>
-                {match.winners.map((winner) => {
-                  return <p key={winner._id}>{winner.username}</p>
-                })}
-              </td>
-            </tr>
-          )
-        })}
-      </Table>
+
+      <h1 className="my-4 text-left text-3xl font-bold">Recent Matches</h1>
+      {matches.map((match) => {
+        return <AccordionPanel key={match._id} match={match} />
+      })}
     </>
   )
 }

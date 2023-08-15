@@ -1,8 +1,9 @@
 import { useLoaderData, useParams } from "react-router-dom"
 import { Match } from "../../types"
 import Table from "../../components/Table"
-import { formatDate, toTitleCase, formatPlayers } from "../../utils/formatter"
 import calculatePlayerWins from "../../utils/calculatePlayerWins"
+import AccordionPanel from "../../components/AccordionPanel"
+import { toTitleCase } from "../../utils/formatter"
 
 export async function loader({ params }: any) {
   try {
@@ -20,7 +21,6 @@ function GamePage() {
   const matches = useLoaderData() as Match[]
   const { gameName } = useParams()
   const players = calculatePlayerWins(matches)
-  const matchesHeaders = ["#", "Date", "Game", "Players", "Winners"]
   const rankingHeaders = ["Rank", "Username", "Wins", "Losses", "Win Rate"]
   return (
     <>
@@ -45,25 +45,11 @@ function GamePage() {
           )
         })}
       </Table>
-      <Table title="Recent Matches" headers={matchesHeaders}>
-        {matches.map((match, index) => {
-          return (
-            <tr key={match._id} className="odd:bg-slate-700 even:bg-slate-900">
-              <td>{index + 1}</td>
-              <td>{formatDate(match.date)}</td>
-              <td>{match.game}</td>
-              <td>
-                <p>{formatPlayers(match.players)}</p>
-              </td>
-              <td>
-                {match.winners.map((winner) => {
-                  return <p key={winner._id}>{winner.username}</p>
-                })}
-              </td>
-            </tr>
-          )
-        })}
-      </Table>
+
+      <h1 className="my-4 text-3xl font-bold">Matches</h1>
+      {matches.map((match) => {
+        return <AccordionPanel key={match._id} match={match} />
+      })}
     </>
   )
 }

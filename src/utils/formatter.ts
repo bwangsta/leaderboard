@@ -12,7 +12,7 @@ export function formatPlayers(players: PlayerInfo[]) {
   return usernames.join(", ")
 }
 
-export function toTitleCase(name: string, delimiter: string) {
+export function toTitleCase(name: string, delimiter: string = " ") {
   const words = name.split(delimiter)
   const newName = words
     .map((word) => word[0].toUpperCase() + word.substring(1))

@@ -96,7 +96,7 @@ WIP
 ## Roadmap
 
 - [x] Build add new match form
-- [ ] Build accordion
+- [x] Build accordion
 - [ ] Add form validation
 - [ ] Add pagination
 - [ ] Add feature to edit and delete matches and players
