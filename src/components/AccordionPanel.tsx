@@ -3,12 +3,17 @@ import { Match } from "../types"
 import { formatDate, toTitleCase } from "../utils/formatter"
 import { FaCrown, FaChevronDown, FaChevronUp, FaRegUser } from "react-icons/fa"
 import Table from "./Table"
+import { Link } from "react-router-dom"
 
 type AccordionPanelProps = {
   match: Match
+  backgroundColor?: string
 }
 
-function AccordionPanel({ match }: AccordionPanelProps) {
+function AccordionPanel({
+  match,
+  backgroundColor = "bg-slate-950",
+}: AccordionPanelProps) {
   const [isActive, setIsActive] = useState(false)
   let headers: string[] = []
   for (let key of Object.keys(match.players[0])) {
@@ -19,7 +24,9 @@ function AccordionPanel({ match }: AccordionPanelProps) {
 
   return (
     <div className="my-1 overflow-hidden rounded-lg">
-      <div className="grid items-center gap-2 bg-slate-950 p-4 sm:grid-cols-[10ch_1fr_1fr_1fr_1rem]">
+      <div
+        className={`grid items-center gap-2 ${backgroundColor} p-4 sm:grid-cols-[10ch_1fr_1fr_1fr_1rem]`}
+      >
         <p>{formatDate(match.date)}</p>
         <p className="text-2xl font-semibold sm:text-base">{match.game}</p>
         <div className="flex flex-col">
@@ -27,7 +34,7 @@ function AccordionPanel({ match }: AccordionPanelProps) {
             return (
               <div key={winner._id} className="flex items-center gap-1">
                 <FaCrown className="text-yellow-300" />
-                <p>{winner.username}</p>
+                <Link to={`/players/${winner._id}`}>{winner.username}</Link>
               </div>
             )
           })}
@@ -37,9 +44,12 @@ function AccordionPanel({ match }: AccordionPanelProps) {
             return (
               <div key={player._id} className="flex items-center gap-1">
                 <FaRegUser />
-                <p className="overflow-hidden text-ellipsis whitespace-nowrap">
+                <Link
+                  to={`/players/${player._id}`}
+                  className="overflow-hidden text-ellipsis whitespace-nowrap"
+                >
                   {player.username}
-                </p>
+                </Link>
               </div>
             )
           })}
@@ -61,7 +71,9 @@ function AccordionPanel({ match }: AccordionPanelProps) {
             {match.players.map(({ player, role, score }) => {
               return (
                 <tr key={player._id}>
-                  <td>{player.username}</td>
+                  <td>
+                    <Link to={`/players/${player._id}`}>{player.username}</Link>
+                  </td>
                   {role && <td>{role}</td>}
                   {score && <td>{score}</td>}
                 </tr>

@@ -5,6 +5,7 @@ import { getMatches, getPlayers } from "../../services/api"
 import GameItem from "./GameItem"
 import sortRankings from "../../utils/sortRankings"
 import AccordionPanel from "../../components/AccordionPanel"
+import { Link } from "react-router-dom"
 
 export async function loader() {
   const data = await Promise.all([getMatches(), getPlayers()])
@@ -37,7 +38,7 @@ function Home() {
     },
   ]
 
-  sortRankings(players)
+  // sortRankings(players)
 
   return (
     <>
@@ -51,7 +52,9 @@ function Home() {
           return (
             <tr key={player._id} className="odd:bg-slate-700 even:bg-slate-900">
               <td>{index + 1}</td>
-              <td>{player.username}</td>
+              <td>
+                <Link to={`/players/${player._id}`}>{player.username}</Link>
+              </td>
               <td>{player.wins}</td>
               <td>{player.played - player.wins}</td>
               <td>

@@ -97,6 +97,7 @@ WIP
 
 - [x] Build add new match form
 - [x] Build accordion
+- [x] Build page for each player
 - [ ] Add form validation
 - [ ] Add pagination
 - [ ] Add feature to edit and delete matches and players

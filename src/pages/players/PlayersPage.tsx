@@ -4,6 +4,7 @@ import Modal from "../../components/Modal"
 import AddPlayer from "./AddPlayer"
 import Table from "../../components/Table"
 import { Player } from "../../types"
+import { Link } from "react-router-dom"
 
 export function loader() {
   const data = fetch("http://localhost:8080/players")
@@ -14,7 +15,7 @@ export function loader() {
   return data
 }
 
-function Players() {
+function PlayersPage() {
   const players = useLoaderData() as Player[]
   const modalRef = useRef<HTMLDialogElement>(null)
   const playerHeaders = [
@@ -42,7 +43,9 @@ function Players() {
           return (
             <tr key={player._id} className="odd:bg-slate-700 even:bg-slate-900">
               <td>{index + 1}</td>
-              <td>{player.username}</td>
+              <td>
+                <Link to={`/players/${player._id}`}>{player.username}</Link>
+              </td>
               <td>{player.wins}</td>
               <td>{player.played - player.wins}</td>
               <td>{player.played}</td>
@@ -60,4 +63,4 @@ function Players() {
   )
 }
 
-export default Players
+export default PlayersPage

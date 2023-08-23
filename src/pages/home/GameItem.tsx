@@ -25,9 +25,12 @@ function GameItem({ name, matches }: GameItemProps) {
           return (
             <li key={player._id} className="flex gap-1">
               <span>{index + 1}.</span>
-              <span className="overflow-hidden text-ellipsis">
+              <Link
+                to={`/players/${player._id}`}
+                className="overflow-hidden text-ellipsis"
+              >
                 {player.username}
-              </span>
+              </Link>
               <span className="ml-auto">{player.wins}</span>
             </li>
           )
