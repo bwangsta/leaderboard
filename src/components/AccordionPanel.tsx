@@ -17,7 +17,7 @@ function AccordionPanel({
   const [isActive, setIsActive] = useState(false)
   let headers: string[] = []
   for (let key of Object.keys(match.players[0])) {
-    if (key !== "_id") {
+    if (key !== "player_id") {
       headers.push(toTitleCase(key))
     }
   }
@@ -32,20 +32,22 @@ function AccordionPanel({
         <div className="flex flex-col">
           {match.winners.map((winner) => {
             return (
-              <div key={winner._id} className="flex items-center gap-1">
+              <div key={winner.player_id} className="flex items-center gap-1">
                 <FaCrown className="text-yellow-300" />
-                <Link to={`/players/${winner._id}`}>{winner.username}</Link>
+                <Link to={`/players/${winner.player_id}`}>
+                  {winner.username}
+                </Link>
               </div>
             )
           })}
         </div>
         <div className="grid grid-cols-2 gap-1">
-          {match.players.map(({ player }) => {
+          {match.players.map((player) => {
             return (
-              <div key={player._id} className="flex items-center gap-1">
+              <div key={player.username} className="flex items-center gap-1">
                 <FaRegUser />
                 <Link
-                  to={`/players/${player._id}`}
+                  to={`/players/${player.player_id}`}
                   className="overflow-hidden text-ellipsis whitespace-nowrap"
                 >
                   {player.username}
@@ -68,14 +70,16 @@ function AccordionPanel({
       <div>
         {isActive && (
           <Table headers={headers}>
-            {match.players.map(({ player, role, score }) => {
+            {match.players.map((player) => {
               return (
-                <tr key={player._id}>
+                <tr key={player.player_id}>
                   <td>
-                    <Link to={`/players/${player._id}`}>{player.username}</Link>
+                    <Link to={`/players/${player.player_id}`}>
+                      {player.username}
+                    </Link>
                   </td>
-                  {role && <td>{role}</td>}
-                  {score && <td>{score}</td>}
+                  {player.role && <td>{player.role}</td>}
+                  {player.score && <td>{player.score}</td>}
                 </tr>
               )
             })}

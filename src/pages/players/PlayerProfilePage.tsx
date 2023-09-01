@@ -1,21 +1,9 @@
-import { useLoaderData } from "react-router-dom"
-import { Match, Player } from "../../types"
+import { useLoaderData, useParams } from "react-router-dom"
+import { Match, Player, Rank } from "../../types"
 import AccordionPanel from "../../components/AccordionPanel"
-import { getPlayers } from "../../services/api"
+import { getPlayer, getPlayerRankings } from "../../services/api"
 
 export async function loader({ params }: any) {
-  async function getOnePlayer() {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/players/${params.playerId}`
-      )
-      const data: Player[] = await response.json()
-      return data
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   async function getPlayerMatches() {
     try {
       const response = await fetch(
@@ -29,45 +17,63 @@ export async function loader({ params }: any) {
   }
 
   const data = await Promise.all([
-    getOnePlayer(),
+    getPlayer(params.playerId),
     getPlayerMatches(),
-    getPlayers(),
+    getPlayerRankings(),
   ])
   return data
 }
 
 function PlayerProfilePage() {
-  const [playerData, matches, players] = useLoaderData() as [
+  const { playerId } = useParams()
+  const [playerInfo, matches, rankings] = useLoaderData() as [
     Player,
     Match[],
-    Player[]
+    Rank[]
   ]
-  const rank = players.findIndex((player) => player._id === playerData._id) + 1
+
+  const index = rankings.findIndex((player) => player._id === playerId)
+  const playerData = rankings[index]
 
   return (
     <>
-      <div className="my-4">
-        <h1 className="text-4xl font-black">{playerData.username}</h1>
-        <p className="text-3xl font-bold">Rank {rank}</p>
+      <div className="py-4">
+        <h1 className="text-4xl font-black">{playerInfo.username}</h1>
+        <p className="text-3xl font-bold">
+          Rank {index > -1 ? index + 1 : "--"}
+        </p>
         <p className="text-2xl">
-          {playerData.wins}W - {playerData.played - playerData.wins}L
+          {playerData
+            ? `${playerData.wins}W - ${playerData.played - playerData.wins}L`
+            : "0W - 0L"}
         </p>
       </div>
 
-      <h2 className="text-3xl">Match History</h2>
-      {matches.map((match) => {
-        return (
-          <AccordionPanel
-            key={match._id}
-            match={match}
-            backgroundColor={
-              match.winners.some((winner) => winner._id === playerData._id)
-                ? "bg-blue-500"
-                : "bg-red-500"
-            }
-          />
-        )
-      })}
+      {matches.length > 0 ? (
+        <>
+          <h2 className="text-3xl">Match History</h2>
+          {matches.map((match) => {
+            return (
+              <AccordionPanel
+                key={match._id}
+                match={match}
+                backgroundColor={
+                  match.winners.some(
+                    (winner) => winner.player_id === playerInfo._id
+                  )
+                    ? "bg-blue-500"
+                    : "bg-red-500"
+                }
+              />
+            )
+          })}
+        </>
+      ) : (
+        <>
+          <p>No Matches Found</p>
+          <p>Play a match to earn a rank on the leaderboard.</p>
+        </>
+      )}
     </>
   )
 }

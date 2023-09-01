@@ -1,54 +1,72 @@
 import { useLoaderData } from "react-router-dom"
-import { Match, Player } from "../../types"
+import { Match, Rank, Rankings } from "../../types"
 import Table from "../../components/Table"
-import { getMatches, getPlayers } from "../../services/api"
+import {
+  getGameRankings,
+  getMatches,
+  getPlayerRankings,
+} from "../../services/api"
 import GameItem from "./GameItem"
-import sortRankings from "../../utils/sortRankings"
 import AccordionPanel from "../../components/AccordionPanel"
 import { Link } from "react-router-dom"
 
 export async function loader() {
-  const data = await Promise.all([getMatches(), getPlayers()])
+  const data = await Promise.all([
+    getMatches(),
+    getPlayerRankings(),
+    getGameRankings("Bang"),
+    getGameRankings("Catan"),
+    getGameRankings("Ticket To Ride"),
+    getGameRankings("Mahjong"),
+  ])
   return data
 }
 
 function Home() {
-  const [matches, players] = useLoaderData() as [Match[], Player[]]
+  const [
+    matches,
+    rankings,
+    bangRankings,
+    catanRankings,
+    ticketRankings,
+    mahjongRankings,
+  ] = useLoaderData() as [
+    Match[],
+    Rank[],
+    Rankings,
+    Rankings,
+    Rankings,
+    Rankings
+  ]
   const playerHeaders = ["Rank", "Username", "Wins", "Losses", "Win Rate"]
-  const catan = matches.filter((match) => match.game === "Catan")
-  const ticket = matches.filter((match) => match.game === "Ticket To Ride")
-  const bang = matches.filter((match) => match.game === "Bang")
-  const mahjong = matches.filter((match) => match.game === "Mahjong")
-  const games = [
+  const gameRankings = [
     {
       name: "bang",
-      game: bang,
+      rankings: bangRankings,
     },
     {
       name: "catan",
-      game: catan,
+      rankings: catanRankings,
     },
     {
       name: "ticket-to-ride",
-      game: ticket,
+      rankings: ticketRankings,
     },
     {
       name: "mahjong",
-      game: mahjong,
+      rankings: mahjongRankings,
     },
   ]
-
-  // sortRankings(players)
 
   return (
     <>
       <div className="mt-4 grid grid-cols-fluid gap-4">
-        {games.map(({ name, game }) => {
-          return <GameItem key={name} name={name} matches={game} />
-        })}
+        {gameRankings.map((game) => (
+          <GameItem key={game.name} data={game.rankings} />
+        ))}
       </div>
       <Table title="Player Rankings" headers={playerHeaders}>
-        {players.map((player, index) => {
+        {rankings.map((player, index) => {
           return (
             <tr key={player._id} className="odd:bg-slate-700 even:bg-slate-900">
               <td>{index + 1}</td>

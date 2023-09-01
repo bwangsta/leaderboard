@@ -2,30 +2,18 @@ import { useRef } from "react"
 import { useLoaderData } from "react-router-dom"
 import Modal from "../../components/Modal"
 import AddPlayer from "./AddPlayer"
-import Table from "../../components/Table"
 import { Player } from "../../types"
 import { Link } from "react-router-dom"
+import { getPlayers } from "../../services/api"
 
-export function loader() {
-  const data = fetch("http://localhost:8080/players")
-    .then((response) => response.json())
-    .then((data: Player[]) => data)
-    .catch((err) => console.log(err))
-
+export async function loader() {
+  const data = await getPlayers()
   return data
 }
 
 function PlayersPage() {
   const players = useLoaderData() as Player[]
   const modalRef = useRef<HTMLDialogElement>(null)
-  const playerHeaders = [
-    "#",
-    "Username",
-    "Wins",
-    "Losses",
-    "Played",
-    "Win Rate",
-  ]
 
   return (
     <>
@@ -38,27 +26,13 @@ function PlayersPage() {
       <Modal modalRef={modalRef}>
         <AddPlayer modalRef={modalRef} />
       </Modal>
-      <Table title="All Players" headers={playerHeaders}>
-        {players.map((player, index) => {
-          return (
-            <tr key={player._id} className="odd:bg-slate-700 even:bg-slate-900">
-              <td>{index + 1}</td>
-              <td>
-                <Link to={`/players/${player._id}`}>{player.username}</Link>
-              </td>
-              <td>{player.wins}</td>
-              <td>{player.played - player.wins}</td>
-              <td>{player.played}</td>
-              <td>
-                {player.played === 0
-                  ? "0.00"
-                  : ((player.wins / player.played) * 100).toFixed(2)}
-                %
-              </td>
-            </tr>
-          )
-        })}
-      </Table>
+      {players.map((player) => {
+        return (
+          <div key={player._id}>
+            <Link to={`/players/${player._id}`}>{player.username}</Link>
+          </div>
+        )
+      })}
     </>
   )
 }

@@ -1,34 +1,25 @@
-import { useLoaderData, useParams } from "react-router-dom"
-import { Match } from "../../types"
+import { useLoaderData, useLocation } from "react-router-dom"
+import { Match, Rankings } from "../../types"
 import Table from "../../components/Table"
-import calculatePlayerWins from "../../utils/calculatePlayerWins"
 import AccordionPanel from "../../components/AccordionPanel"
-import { toTitleCase } from "../../utils/formatter"
+import { getGameMatches } from "../../services/api"
 
 export async function loader({ params }: any) {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/matches?game=${params.gameName}`
-    )
-    const data: Match[] = await response.json()
-    return data
-  } catch (err) {
-    console.log(err)
-  }
+  const data = await getGameMatches(params.gameName)
+  return data
 }
 
 function GamePage() {
   const matches = useLoaderData() as Match[]
-  const { gameName } = useParams()
-  const players = calculatePlayerWins(matches)
+  const { state } = useLocation()
+  const { game, rankings }: Rankings = state
   const rankingHeaders = ["Rank", "Username", "Wins", "Losses", "Win Rate"]
+
   return (
     <>
-      <h1 className="my-4 text-center text-4xl font-bold">
-        {toTitleCase(gameName ?? "", "-")}
-      </h1>
+      <h1 className="my-4 text-center text-4xl font-bold">{game}</h1>
       <Table title="Rankings" headers={rankingHeaders}>
-        {players.map((player, index) => {
+        {rankings.map((player, index) => {
           return (
             <tr key={player._id} className="odd:bg-slate-700 even:bg-slate-900">
               <td>{index + 1}</td>

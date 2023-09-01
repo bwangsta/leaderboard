@@ -2,9 +2,8 @@ export type Match = {
   _id: string
   date: string
   game: string
-  last_name: string
-  players: PlayerInfo[]
-  winners: Player[]
+  players: PlayerStats[]
+  winners: [{ player_id: string; username: string }]
 }
 
 export type Player = {
@@ -12,13 +11,23 @@ export type Player = {
   username: string
   first_name: string
   last_name: string
+}
+
+export type PlayerStats = {
+  player_id: string
+  username: string
+  role?: string
+  score?: number
+}
+
+export type Rank = {
+  _id: string
+  username: string
   wins: number
   played: number
 }
 
-export type PlayerInfo = {
-  _id: string
-  player: Player
-  role?: string
-  score?: number
+export type Rankings = {
+  game: string
+  rankings: Rank[]
 }

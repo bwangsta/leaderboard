@@ -21,7 +21,7 @@ type Option = {
 }
 
 function AddMatch({ players, modalRef }: AddMatchProps) {
-  const games = ["Bang", "Catan", "Ticket to Ride", "Mahjong"]
+  const games = ["Bang", "Catan", "Ticket To Ride", "Mahjong"]
   const [formData, setFormData] = useState<FormData>({
     date: new Date(),
     game: {} as Option,
@@ -39,10 +39,12 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
   })
 
   async function handleSubmit() {
-    const selectedPlayers = formData.players.map(({ value }) => {
-      return { player: value }
+    const selectedPlayers = formData.players.map(({ label, value }) => {
+      return { player_id: value, username: label }
     })
-    const winners = formData.winners.map(({ value }) => value)
+    const winners = formData.winners.map(({ label, value }) => {
+      return { player_id: value, username: label }
+    })
     const formattedFormData = {
       date: formData.date,
       game: formData.game.value,
@@ -64,27 +66,6 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
       }
     }
 
-    async function updatePlayers() {
-      selectedPlayers.map(async ({ player: playerId }) => {
-        const player = players.find((player) => player._id === playerId)!
-        const body = {
-          wins: winners.includes(player._id) ? player.wins + 1 : player.wins,
-          played: player.played + 1,
-        }
-        try {
-          await fetch(`http://localhost:8080/players/${playerId}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-          })
-        } catch (err) {
-          console.log(err)
-        }
-      })
-    }
-
     setFormData({
       date: new Date(),
       game: {} as Option,
@@ -92,7 +73,7 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
       winners: [],
     })
 
-    await Promise.all([postMatch(), updatePlayers()])
+    await postMatch()
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {

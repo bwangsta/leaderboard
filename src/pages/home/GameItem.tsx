@@ -1,37 +1,34 @@
 import { Link } from "react-router-dom"
-import { Match } from "../../types"
-import { toTitleCase } from "../../utils/formatter"
-import calculatePlayerWins from "../../utils/calculatePlayerWins"
+import { Rankings } from "../../types"
+import { toTitleCase, toKebabCase } from "../../utils/formatter"
 
 type GameItemProps = {
-  name: string
-  matches: Match[]
+  data: Rankings
 }
 
-function GameItem({ name, matches }: GameItemProps) {
-  const players = calculatePlayerWins(matches, 3)
-
+function GameItem({ data }: GameItemProps) {
   return (
     <div className="flex flex-col rounded-2xl bg-blue-700 p-4">
       <Link
-        to={`/games/${name}`}
+        to={`/games/${toKebabCase(data.game)}`}
+        state={data}
         className="mb-2 flex-1 text-2xl font-semibold"
       >
-        {toTitleCase(name, "-")}
+        {toTitleCase(data.game, "-")}
       </Link>
 
       <ol>
-        {players.map((player, index) => {
+        {data.rankings.slice(0, 3).map(({ _id, username, wins }, index) => {
           return (
-            <li key={player._id} className="flex gap-1">
+            <li key={_id} className="flex gap-1">
               <span>{index + 1}.</span>
               <Link
-                to={`/players/${player._id}`}
+                to={`/players/${_id}`}
                 className="overflow-hidden text-ellipsis"
               >
-                {player.username}
+                {username}
               </Link>
-              <span className="ml-auto">{player.wins}</span>
+              <span className="ml-auto">{wins}</span>
             </li>
           )
         })}
