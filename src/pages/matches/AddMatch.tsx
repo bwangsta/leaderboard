@@ -2,6 +2,7 @@ import { useState } from "react"
 import Select, { ActionMeta, SingleValue, MultiValue } from "react-select"
 import FormInput from "../../components/FormInput"
 import { Player } from "../../types"
+import { formatDatePicker } from "../../utils/formatter"
 
 type AddMatchProps = {
   players: Player[]
@@ -9,7 +10,7 @@ type AddMatchProps = {
 }
 
 type FormData = {
-  date: Date
+  date: string
   game: Option
   players: Option[]
   winners: Option[]
@@ -23,7 +24,7 @@ type Option = {
 function AddMatch({ players, modalRef }: AddMatchProps) {
   const games = ["Bang", "Catan", "Ticket To Ride", "Mahjong"]
   const [formData, setFormData] = useState<FormData>({
-    date: new Date(),
+    date: formatDatePicker(new Date()),
     game: {} as Option,
     players: [],
     winners: [],
@@ -66,21 +67,20 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
       }
     }
 
+    await postMatch()
+
     setFormData({
-      date: new Date(),
+      date: formatDatePicker(new Date()),
       game: {} as Option,
       players: [],
       winners: [],
     })
-
-    await postMatch()
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { type, name, value } = event.target
-    const newValue = type === "date" ? new Date(value) : value
+    const { name, value } = event.target
     setFormData((prevFormData) => {
-      return { ...prevFormData, [name]: newValue }
+      return { ...prevFormData, [name]: value }
     })
   }
 
@@ -100,7 +100,7 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
         <FormInput
           type="date"
           name="date"
-          value={formData.date.toLocaleDateString("en-CA")}
+          value={formData.date}
           handleChange={handleInputChange}
           handleKeyDown={(e) => e.preventDefault()}
         />

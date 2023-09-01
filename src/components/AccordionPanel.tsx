@@ -22,6 +22,8 @@ function AccordionPanel({
     }
   }
 
+  // console.log(match.date)
+
   return (
     <div className="my-1 overflow-hidden rounded-lg">
       <div
