@@ -1,4 +1,11 @@
-import { Match, Player, Rankings } from "../types"
+import {
+  Match,
+  MatchFormData,
+  Player,
+  PlayerFormData,
+  Rank,
+  Rankings,
+} from "../types"
 import { toKebabCase } from "../utils/formatter"
 
 const BASE_API_URL = "http://localhost:8080"
@@ -8,6 +15,34 @@ export async function getMatches() {
     const response = await fetch(`${BASE_API_URL}/matches`)
     const data: Match[] = await response.json()
     return data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function postMatch(formData: MatchFormData) {
+  try {
+    await fetch(`${BASE_API_URL}/matches`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function postPlayer(formData: PlayerFormData) {
+  try {
+    await fetch(`${BASE_API_URL}/players`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
   } catch (err) {
     console.log(err)
   }
@@ -26,17 +61,27 @@ export async function getPlayers() {
 export async function getPlayer(id: string) {
   try {
     const response = await fetch(`${BASE_API_URL}/players/${id}`)
-    const data: Player[] = await response.json()
+    const data: Player = await response.json()
     return data
   } catch (err) {
     console.log(err)
   }
 }
 
-export async function getPlayerRankings() {
+export async function getRankings() {
   try {
     const response = await fetch(`${BASE_API_URL}/rankings`)
-    const data: Rankings = await response.json()
+    const data: Rank[] = await response.json()
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function getPlayerMatches(playerId: string) {
+  try {
+    const response = await fetch(`${BASE_API_URL}/matches?player=${playerId}`)
+    const data: Match[] = await response.json()
     return data
   } catch (err) {
     console.log(err)
@@ -54,9 +99,22 @@ export async function getGameRankings(game: string) {
   }
 }
 
+export async function getAllGameRankings() {
+  const games = ["bang", "catan", "ticket-to-ride", "mahjong"]
+  const data = []
+  try {
+    for (let game of games) {
+      data.push({ name: game, rankings: await getGameRankings(game) })
+    }
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export async function getGameMatches(game: string) {
   try {
-    const response = await fetch(`http://localhost:8080/matches?game=${game}`)
+    const response = await fetch(`${BASE_API_URL}/matches?game=${game}`)
     const data: Match[] = await response.json()
     return data
   } catch (err) {

@@ -1,19 +1,30 @@
 import { useRef } from "react"
-import { useLoaderData } from "react-router-dom"
 import Modal from "../../components/Modal"
 import AddPlayer from "./AddPlayer"
-import { Player } from "../../types"
 import { Link } from "react-router-dom"
 import { getPlayers } from "../../services/api"
-
-export async function loader() {
-  const data = await getPlayers()
-  return data
-}
+import { useQuery } from "@tanstack/react-query"
+import Loader from "../../components/Loader"
+import ErrorMessage from "../../components/ErrorMessage"
 
 function PlayersPage() {
-  const players = useLoaderData() as Player[]
+  const {
+    data: players,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["players"],
+    queryFn: getPlayers,
+  })
   const modalRef = useRef<HTMLDialogElement>(null)
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (error instanceof Error) {
+    return <ErrorMessage name={error.name} message={error.message} />
+  }
 
   return (
     <>
@@ -26,7 +37,8 @@ function PlayersPage() {
       <Modal modalRef={modalRef}>
         <AddPlayer modalRef={modalRef} />
       </Modal>
-      {players.map((player) => {
+      <h1 className="my-4 text-left text-3xl font-bold">All Players</h1>
+      {players?.map((player) => {
         return (
           <div key={player._id}>
             <Link to={`/players/${player._id}`}>{player.username}</Link>

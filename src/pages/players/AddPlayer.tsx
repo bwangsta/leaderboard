@@ -1,21 +1,23 @@
 import { useState } from "react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import FormInput from "../../components/FormInput"
+import { postPlayer } from "../../services/api"
+import { PlayerFormData } from "../../types"
 
 type AddPlayerProps = {
   modalRef: React.RefObject<HTMLDialogElement>
 }
 
-type FormData = {
-  username: string
-  first_name: string
-  last_name: string
-}
-
 function AddPlayer({ modalRef }: AddPlayerProps) {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<PlayerFormData>({
     username: "",
     first_name: "",
     last_name: "",
+  })
+  const queryClient = useQueryClient()
+  const { mutate, error, isSuccess } = useMutation({
+    mutationFn: postPlayer,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["players"] }),
   })
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -25,23 +27,23 @@ function AddPlayer({ modalRef }: AddPlayerProps) {
     })
   }
 
-  async function handleSubmit() {
-    try {
-      await fetch("http://localhost:8080/players", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-    } catch (err) {
-      console.log(err)
-    }
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    mutate(formData)
     setFormData({
       username: "",
       first_name: "",
       last_name: "",
     })
+    modalRef.current?.close()
+  }
+
+  if (error instanceof Error) {
+    console.log(error)
+  }
+
+  if (isSuccess) {
+    console.log("Successfully added")
   }
 
   return (

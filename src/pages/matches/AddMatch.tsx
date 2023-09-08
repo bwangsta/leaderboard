@@ -3,6 +3,8 @@ import Select, { ActionMeta, SingleValue, MultiValue } from "react-select"
 import FormInput from "../../components/FormInput"
 import { Player } from "../../types"
 import { formatDatePicker } from "../../utils/formatter"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { postMatch } from "../../services/api"
 
 type AddMatchProps = {
   players: Player[]
@@ -23,6 +25,11 @@ type Option = {
 
 function AddMatch({ players, modalRef }: AddMatchProps) {
   const games = ["Bang", "Catan", "Ticket To Ride", "Mahjong"]
+  const queryClient = useQueryClient()
+  const { mutate, error, isSuccess } = useMutation({
+    mutationFn: postMatch,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["matches"] }),
+  })
   const [formData, setFormData] = useState<FormData>({
     date: formatDatePicker(new Date()),
     game: {} as Option,
@@ -39,7 +46,8 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
     return { value: player.value, label: player.label }
   })
 
-  async function handleSubmit() {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
     const selectedPlayers = formData.players.map(({ label, value }) => {
       return { player_id: value, username: label }
     })
@@ -52,22 +60,7 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
       players: selectedPlayers,
       winners: winners,
     }
-
-    async function postMatch() {
-      try {
-        await fetch("http://localhost:8080/matches", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formattedFormData),
-        })
-      } catch (err) {
-        console.log(err)
-      }
-    }
-
-    await postMatch()
+    mutate(formattedFormData)
 
     setFormData({
       date: formatDatePicker(new Date()),
@@ -75,6 +68,7 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
       players: [],
       winners: [],
     })
+    modalRef.current?.close()
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -91,6 +85,14 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
     setFormData((prevFormData) => {
       return { ...prevFormData, [action.name!]: options }
     })
+  }
+
+  if (error instanceof Error) {
+    console.log(error)
+  }
+
+  if (isSuccess) {
+    console.log("Successfully added the match")
   }
 
   return (

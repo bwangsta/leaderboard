@@ -1,24 +1,38 @@
 import { Link } from "react-router-dom"
-import { Rankings } from "../../types"
+import { useQuery } from "@tanstack/react-query"
 import { toTitleCase, toKebabCase } from "../../utils/formatter"
+import { getGameRankings } from "../../services/api"
+import Loader from "../../components/Loader"
 
 type GameItemProps = {
-  data: Rankings
+  name: string
 }
 
-function GameItem({ data }: GameItemProps) {
+function GameItem({ name }: GameItemProps) {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["rankings", toKebabCase(name)],
+    queryFn: () => getGameRankings(name),
+  })
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (error instanceof Error) {
+    return <p>Error</p>
+  }
+
   return (
     <div className="flex flex-col rounded-2xl bg-blue-700 p-4">
       <Link
-        to={`/games/${toKebabCase(data.game)}`}
-        state={data}
+        to={`/games/${toKebabCase(name)}`}
         className="mb-2 flex-1 text-2xl font-semibold"
       >
-        {toTitleCase(data.game, "-")}
+        {toTitleCase(name, "-")}
       </Link>
 
       <ol>
-        {data.rankings.slice(0, 3).map(({ _id, username, wins }, index) => {
+        {data?.rankings.slice(0, 3).map(({ _id, username, wins }, index) => {
           return (
             <li key={_id} className="flex gap-1">
               <span>{index + 1}.</span>

@@ -1,72 +1,58 @@
-import { useLoaderData } from "react-router-dom"
-import { Match, Rank, Rankings } from "../../types"
 import Table from "../../components/Table"
-import {
-  getGameRankings,
-  getMatches,
-  getPlayerRankings,
-} from "../../services/api"
+import { getMatches, getRankings } from "../../services/api"
 import GameItem from "./GameItem"
 import AccordionPanel from "../../components/AccordionPanel"
 import { Link } from "react-router-dom"
-
-export async function loader() {
-  const data = await Promise.all([
-    getMatches(),
-    getPlayerRankings(),
-    getGameRankings("Bang"),
-    getGameRankings("Catan"),
-    getGameRankings("Ticket To Ride"),
-    getGameRankings("Mahjong"),
-  ])
-  return data
-}
+import { useQuery } from "@tanstack/react-query"
+import Loader from "../../components/Loader"
+import ErrorMessage from "../../components/ErrorMessage"
 
 function Home() {
-  const [
-    matches,
-    rankings,
-    bangRankings,
-    catanRankings,
-    ticketRankings,
-    mahjongRankings,
-  ] = useLoaderData() as [
-    Match[],
-    Rank[],
-    Rankings,
-    Rankings,
-    Rankings,
-    Rankings
-  ]
   const playerHeaders = ["Rank", "Username", "Wins", "Losses", "Win Rate"]
-  const gameRankings = [
-    {
-      name: "bang",
-      rankings: bangRankings,
-    },
-    {
-      name: "catan",
-      rankings: catanRankings,
-    },
-    {
-      name: "ticket-to-ride",
-      rankings: ticketRankings,
-    },
-    {
-      name: "mahjong",
-      rankings: mahjongRankings,
-    },
-  ]
+  const games = ["Bang", "Catan", "Ticket To Ride", "Mahjong"]
+  const {
+    data: matches,
+    isLoading: isMatchesLoading,
+    error: matchesError,
+  } = useQuery({
+    queryKey: ["matches"],
+    queryFn: getMatches,
+  })
+  const {
+    data: rankings,
+    isLoading: isRankingsLoading,
+    error: rankingsError,
+  } = useQuery({
+    queryKey: ["rankings"],
+    queryFn: getRankings,
+  })
+
+  if (isMatchesLoading || isRankingsLoading) {
+    return <Loader />
+  }
+
+  if (matchesError instanceof Error) {
+    return (
+      <ErrorMessage name={matchesError.name} message={matchesError.message} />
+    )
+  }
+
+  if (rankingsError instanceof Error) {
+    return (
+      <ErrorMessage name={rankingsError.name} message={rankingsError.message} />
+    )
+  }
 
   return (
     <>
       <div className="mt-4 grid grid-cols-fluid gap-4">
-        {gameRankings.map((game) => (
-          <GameItem key={game.name} data={game.rankings} />
+        {games.map((game) => (
+          <GameItem key={game} name={game} />
         ))}
       </div>
+
       <Table title="Player Rankings" headers={playerHeaders}>
-        {rankings.map((player, index) => {
+        {rankings?.map((player, index) => {
           return (
             <tr key={player._id} className="odd:bg-slate-700 even:bg-slate-900">
               <td>{index + 1}</td>
@@ -87,7 +73,7 @@ function Home() {
       </Table>
 
       <h1 className="my-4 text-left text-3xl font-bold">Recent Matches</h1>
-      {matches.map((match) => {
+      {matches?.map((match) => {
         return <AccordionPanel key={match._id} match={match} />
       })}
     </>
