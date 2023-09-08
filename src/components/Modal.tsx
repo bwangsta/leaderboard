@@ -1,36 +1,46 @@
-import { ReactNode, RefObject } from "react"
+import { ReactNode, useState } from "react"
+import { FaTimes } from "react-icons/fa"
 
 type ModalProps = {
-  children: ReactNode
-  modalRef: RefObject<HTMLDialogElement>
+  title: string
+  renderForm: (closeModal: () => void) => ReactNode
 }
 
-function Modal({ children, modalRef }: ModalProps) {
-  // function handleCloseModal(
-  //   event: React.MouseEvent<HTMLDialogElement, MouseEvent>
-  // ) {
-  //   const modalDimensions = modalRef.current?.getBoundingClientRect()
+function Modal({ title, renderForm }: ModalProps) {
+  const [isOpen, setIsOpen] = useState(false)
 
-  //   // Closes modal if user clicks outside of the modal
-  //   if (modalDimensions) {
-  //     if (
-  //       event.clientX < modalDimensions.left ||
-  //       event.clientX > modalDimensions.right ||
-  //       event.clientY < modalDimensions.top ||
-  //       event.clientY > modalDimensions.bottom
-  //     ) {
-  //       modalRef.current?.close()
-  //     }
-  //   }
-  // }
+  function openModal() {
+    setIsOpen(true)
+  }
+
+  function closeModal() {
+    setIsOpen(false)
+  }
 
   return (
-    <dialog
-      ref={modalRef}
-      className="w-full max-w-lg rounded-3xl bg-slate-800 p-6 text-inherit caret-black backdrop:bg-black backdrop:bg-opacity-60 backdrop:backdrop-blur"
-    >
-      {children}
-    </dialog>
+    <>
+      <button
+        className="mt-4 rounded-md bg-blue-400 px-4 py-2 text-lg"
+        onClick={openModal}
+      >
+        {title}
+      </button>
+      {isOpen && (
+        <>
+          <div className="fixed left-0 top-0 h-full w-full bg-black bg-opacity-80"></div>
+          <div className="fixed left-1/2 top-1/2 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-slate-800 p-6">
+            <button
+              type="button"
+              className="float-right rounded-full p-2 hover:bg-blue-400 focus-visible:outline-transparent"
+              onClick={closeModal}
+            >
+              <FaTimes />
+            </button>
+            {renderForm(closeModal)}
+          </div>
+        </>
+      )}
+    </>
   )
 }
 

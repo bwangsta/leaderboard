@@ -5,10 +5,10 @@ import { postPlayer } from "../../services/api"
 import { PlayerFormData } from "../../types"
 
 type AddPlayerProps = {
-  modalRef: React.RefObject<HTMLDialogElement>
+  closeModal: () => void
 }
 
-function AddPlayer({ modalRef }: AddPlayerProps) {
+function AddPlayer({ closeModal }: AddPlayerProps) {
   const [formData, setFormData] = useState<PlayerFormData>({
     username: "",
     first_name: "",
@@ -27,15 +27,19 @@ function AddPlayer({ modalRef }: AddPlayerProps) {
     })
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    mutate(formData)
+  function handleReset() {
     setFormData({
       username: "",
       first_name: "",
       last_name: "",
     })
-    modalRef.current?.close()
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    mutate(formData)
+    handleReset()
+    closeModal()
   }
 
   if (error instanceof Error) {
@@ -47,31 +51,34 @@ function AddPlayer({ modalRef }: AddPlayerProps) {
   }
 
   return (
-    <div className="p-6">
+    <div>
       <h1 className="text-3xl font-bold">Add Player</h1>
       <form className="space-y-2" onSubmit={handleSubmit}>
         <FormInput
           name="username"
           type="text"
+          value={formData.username}
           handleChange={handleInputChange}
         />
         <FormInput
           name="first_name"
           type="text"
+          value={formData.first_name}
           handleChange={handleInputChange}
         />
         <FormInput
           name="last_name"
           type="text"
+          value={formData.last_name}
           handleChange={handleInputChange}
         />
         <div className="mt-2 grid grid-cols-2 gap-2">
           <button
             type="button"
             className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
-            onClick={() => modalRef.current?.close()}
+            onClick={handleReset}
           >
-            Cancel
+            Reset
           </button>
           <button
             type="submit"

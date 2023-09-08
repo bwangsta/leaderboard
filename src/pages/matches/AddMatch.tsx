@@ -8,12 +8,12 @@ import { postMatch } from "../../services/api"
 
 type AddMatchProps = {
   players: Player[]
-  modalRef: React.RefObject<HTMLDialogElement>
+  closeModal: () => void
 }
 
 type FormData = {
   date: string
-  game: Option
+  game: Option | null
   players: Option[]
   winners: Option[]
 }
@@ -23,7 +23,7 @@ type Option = {
   label: string
 }
 
-function AddMatch({ players, modalRef }: AddMatchProps) {
+function AddMatch({ players, closeModal }: AddMatchProps) {
   const games = ["Bang", "Catan", "Ticket To Ride", "Mahjong"]
   const queryClient = useQueryClient()
   const { mutate, error, isSuccess } = useMutation({
@@ -32,7 +32,7 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
   })
   const [formData, setFormData] = useState<FormData>({
     date: formatDatePicker(new Date()),
-    game: {} as Option,
+    game: null,
     players: [],
     winners: [],
   })
@@ -56,19 +56,22 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
     })
     const formattedFormData = {
       date: formData.date,
-      game: formData.game.value,
+      game: formData.game!.value,
       players: selectedPlayers,
       winners: winners,
     }
     mutate(formattedFormData)
+    handleReset()
+    closeModal()
+  }
 
+  function handleReset() {
     setFormData({
       date: formatDatePicker(new Date()),
-      game: {} as Option,
+      game: null,
       players: [],
       winners: [],
     })
-    modalRef.current?.close()
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -111,8 +114,8 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
           id="game"
           name="game"
           options={gameOptions}
+          value={formData.game}
           isSearchable={true}
-          menuPosition="fixed"
           className="text-black"
           onChange={(option, action) => handleSelectChange(option, action)}
         />
@@ -121,9 +124,9 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
           id="players"
           name="players"
           options={playerOptions}
+          value={formData.players}
           isMulti={true}
           isSearchable={true}
-          menuPosition="fixed"
           className="text-black"
           onChange={(option, action) => handleSelectChange(option, action)}
         />
@@ -132,10 +135,10 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
           id="winners"
           name="winners"
           options={winnerOptions}
+          value={formData.winners}
           isMulti={true}
           isSearchable={true}
           isDisabled={formData.players.length === 0 ? true : false}
-          menuPosition="fixed"
           className="text-black"
           onChange={(option, action) => handleSelectChange(option, action)}
         />
@@ -143,10 +146,9 @@ function AddMatch({ players, modalRef }: AddMatchProps) {
           <button
             type="button"
             className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
-            formMethod="dialog"
-            onClick={() => modalRef.current?.close()}
+            onClick={handleReset}
           >
-            Cancel
+            Reset
           </button>
           <button
             type="submit"
