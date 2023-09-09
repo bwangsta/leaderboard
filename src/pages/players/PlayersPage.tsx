@@ -31,13 +31,18 @@ function PlayersPage() {
         renderForm={(closeModal) => <AddPlayer closeModal={closeModal} />}
       />
       <h1 className="my-4 text-left text-3xl font-bold">All Players</h1>
-      {players?.map((player) => {
-        return (
-          <div key={player._id}>
-            <Link to={`/players/${player._id}`}>{player.username}</Link>
-          </div>
-        )
-      })}
+      <div className="grid grid-cols-fluid gap-2">
+        {players?.map((player) => {
+          return (
+            <div
+              key={player._id}
+              className="flex justify-center rounded-lg bg-blue-500 p-4"
+            >
+              <Link to={`/players/${player._id}`}>{player.username}</Link>
+            </div>
+          )
+        })}
+      </div>
     </>
   )
 }
