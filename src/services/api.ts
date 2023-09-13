@@ -22,13 +22,15 @@ export async function getMatches() {
 
 export async function postMatch(formData: MatchFormData) {
   try {
-    await fetch(`${BASE_API_URL}/matches`, {
+    const response = await fetch(`${BASE_API_URL}/matches`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     })
+    const data: Match = await response.json()
+    return data
   } catch (err) {
     console.log(err)
   }
@@ -36,13 +38,15 @@ export async function postMatch(formData: MatchFormData) {
 
 export async function postPlayer(formData: PlayerFormData) {
   try {
-    await fetch(`${BASE_API_URL}/players`, {
+    const response = await fetch(`${BASE_API_URL}/players`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     })
+    const data: Player = await response.json()
+    return data
   } catch (err) {
     console.log(err)
   }
@@ -103,7 +107,7 @@ export async function getAllGameRankings() {
   const games = ["bang", "catan", "ticket-to-ride", "mahjong"]
   const data = []
   try {
-    for (let game of games) {
+    for (const game of games) {
       data.push({ name: game, rankings: await getGameRankings(game) })
     }
     return data

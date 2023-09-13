@@ -1,13 +1,12 @@
 import { useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import Select, { ActionMeta, SingleValue, MultiValue } from "react-select"
 import FormInput from "../../components/FormInput"
-import { Player } from "../../types"
-import { formatDatePicker } from "../../utils/formatter"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { postMatch } from "../../services/api"
+import { formatDatePicker, toKebabCase } from "../../utils/formatter"
+import { getPlayers, postMatch } from "../../services/api"
+import { Match, MatchFormData } from "../../types"
 
 type AddMatchProps = {
-  players: Player[]
   closeModal: () => void
 }
 
@@ -23,12 +22,16 @@ type Option = {
   label: string
 }
 
-function AddMatch({ players, closeModal }: AddMatchProps) {
+function AddMatch({ closeModal }: AddMatchProps) {
   const games = ["Bang", "Catan", "Ticket To Ride", "Mahjong"]
   const queryClient = useQueryClient()
+  const { data: players, isLoading } = useQuery({
+    queryKey: ["players"],
+    queryFn: getPlayers,
+  })
   const { mutate, error, isSuccess } = useMutation({
     mutationFn: postMatch,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["matches"] }),
+    onSuccess: (data, variables) => handleMutationSuccess(data, variables),
   })
   const [formData, setFormData] = useState<FormData>({
     date: formatDatePicker(new Date()),
@@ -39,14 +42,40 @@ function AddMatch({ players, closeModal }: AddMatchProps) {
   const gameOptions: Option[] = games.map((game) => {
     return { value: game, label: game }
   })
-  const playerOptions: Option[] = players.map((player) => {
-    return { value: player._id, label: player.username }
-  })
+  const playerOptions: Option[] =
+    players?.map((player) => {
+      return { value: player._id, label: player.username }
+    }) ?? []
   const winnerOptions: Option[] = formData.players.map((player) => {
     return { value: player.value, label: player.label }
   })
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleMutationSuccess(
+    data: Match | undefined,
+    variables: MatchFormData
+  ) {
+    queryClient.setQueryData<Match[] | undefined>(["matches"], (oldData) => {
+      return oldData ? ([...oldData, data] as Match[]) : oldData
+    })
+    await queryClient.invalidateQueries({
+      queryKey: ["matches"],
+      exact: true,
+    })
+    await queryClient.invalidateQueries({
+      queryKey: ["matches", toKebabCase(variables.game)],
+      exact: true,
+    })
+    await queryClient.invalidateQueries({
+      queryKey: ["rankings"],
+      exact: true,
+    })
+    await queryClient.invalidateQueries({
+      queryKey: ["rankings", toKebabCase(variables.game)],
+      exact: true,
+    })
+  }
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const selectedPlayers = formData.players.map(({ label, value }) => {
       return { player_id: value, username: label }
@@ -127,6 +156,7 @@ function AddMatch({ players, closeModal }: AddMatchProps) {
           value={formData.players}
           isMulti={true}
           isSearchable={true}
+          isLoading={isLoading}
           className="text-black"
           onChange={(option, action) => handleSelectChange(option, action)}
         />

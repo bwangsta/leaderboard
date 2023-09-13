@@ -1,5 +1,3 @@
-import Modal from "../../components/Modal"
-import AddPlayer from "./AddPlayer"
 import { Link } from "react-router-dom"
 import { getPlayers } from "../../services/api"
 import { useQuery } from "@tanstack/react-query"
@@ -26,10 +24,6 @@ function PlayersPage() {
 
   return (
     <>
-      <Modal
-        title="Add Player"
-        renderForm={(closeModal) => <AddPlayer closeModal={closeModal} />}
-      />
       <h1 className="my-4 text-left text-3xl font-bold">All Players</h1>
       <div className="grid grid-cols-fluid gap-2">
         {players?.map((player) => {

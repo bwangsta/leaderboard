@@ -19,10 +19,7 @@ function Modal({ title, renderForm }: ModalProps) {
 
   return (
     <>
-      <button
-        className="mt-4 rounded-md bg-blue-400 px-4 py-2 text-lg"
-        onClick={openModal}
-      >
+      <button className="px-4 py-2" onClick={openModal}>
         {title}
       </button>
       {isOpen && (

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import FormInput from "../../components/FormInput"
 import { postPlayer } from "../../services/api"
-import { PlayerFormData } from "../../types"
+import { Player, PlayerFormData } from "../../types"
 
 type AddPlayerProps = {
   closeModal: () => void
@@ -17,8 +17,18 @@ function AddPlayer({ closeModal }: AddPlayerProps) {
   const queryClient = useQueryClient()
   const { mutate, error, isSuccess } = useMutation({
     mutationFn: postPlayer,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["players"] }),
+    onSuccess: (data) => handleMutationSuccess(data),
   })
+
+  async function handleMutationSuccess(data: Player | undefined) {
+    queryClient.setQueryData<Player[] | undefined>(["players"], (oldData) => {
+      return oldData ? ([...oldData, data] as Player[]) : oldData
+    })
+    await queryClient.invalidateQueries({
+      queryKey: ["players"],
+      exact: true,
+    })
+  }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
@@ -35,7 +45,7 @@ function AddPlayer({ closeModal }: AddPlayerProps) {
     })
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     mutate(formData)
     handleReset()

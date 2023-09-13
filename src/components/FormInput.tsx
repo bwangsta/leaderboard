@@ -30,7 +30,7 @@ function FormInput({
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className="inline-block w-full rounded-lg px-2 py-1 text-black focus:outline-none"
+        className="block w-full rounded-lg px-2 py-1 text-black focus:outline-none"
       />
     </div>
   )

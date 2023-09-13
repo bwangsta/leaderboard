@@ -15,8 +15,8 @@ function AccordionPanel({
   backgroundColor = "bg-slate-950",
 }: AccordionPanelProps) {
   const [isActive, setIsActive] = useState(false)
-  let headers: string[] = []
-  for (let key of Object.keys(match.players[0])) {
+  const headers: string[] = []
+  for (const key of Object.keys(match.players[0])) {
     if (key !== "player_id") {
       headers.push(toTitleCase(key))
     }
