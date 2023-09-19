@@ -49,7 +49,8 @@ function GamePage() {
   return (
     <>
       <h1 className="my-4 text-center text-4xl font-bold">{rankings?.game}</h1>
-      <Table title="Rankings" headers={rankingHeaders}>
+      <Header>Rankings</Header>
+      <Table headers={rankingHeaders}>
         {rankings?.rankings.map((player, index) => {
           return (
             <tr key={player._id} className="odd:bg-slate-700 even:bg-slate-900">

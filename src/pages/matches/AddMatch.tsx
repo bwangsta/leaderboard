@@ -142,6 +142,7 @@ function AddMatch({ closeModal }: AddMatchProps) {
         options={gameOptions}
         value={formData.game}
         isSearchable={true}
+        openMenuOnFocus={true}
         className="text-black"
         onChange={(option, action) => handleSelectChange(option, action)}
       />
@@ -153,6 +154,7 @@ function AddMatch({ closeModal }: AddMatchProps) {
         value={formData.players}
         isMulti={true}
         isSearchable={true}
+        closeMenuOnSelect={false}
         isLoading={isLoading}
         className="text-black"
         onChange={(option, action) => handleSelectChange(option, action)}
@@ -165,7 +167,8 @@ function AddMatch({ closeModal }: AddMatchProps) {
         value={formData.winners}
         isMulti={true}
         isSearchable={true}
-        isDisabled={formData.players.length === 0 ? true : false}
+        closeMenuOnSelect={false}
+        isDisabled={formData.players.length === 0}
         className="text-black"
         onChange={(option, action) => handleSelectChange(option, action)}
       />

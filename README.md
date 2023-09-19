@@ -51,6 +51,7 @@ WIP
 
 - React
 - TailwindCSS
+- RadixUI
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -101,6 +102,7 @@ WIP
 - [ ] Add form validation
 - [ ] Add pagination
 - [ ] Add feature to edit and delete matches and players
+- [ ] Filter matches by date, player, and game
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

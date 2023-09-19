@@ -10,7 +10,7 @@ import AddMatch from "../pages/matches/AddMatch"
 
 function Dropdown() {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <button className="flex items-center gap-1 rounded-lg border-2 border-solid border-white p-2">
           <FaPlus />
