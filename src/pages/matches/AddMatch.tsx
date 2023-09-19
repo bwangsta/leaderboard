@@ -128,67 +128,63 @@ function AddMatch({ closeModal }: AddMatchProps) {
   }
 
   return (
-    <>
-      <h1 className="text-3xl font-bold">Add Match</h1>
-      <form className="space-y-2" onSubmit={handleSubmit}>
-        <FormInput
-          type="date"
-          name="date"
-          value={formData.date}
-          handleChange={handleInputChange}
-          handleKeyDown={(e) => e.preventDefault()}
-        />
-        <label htmlFor="game">Game</label>
-        <Select
-          id="game"
-          name="game"
-          options={gameOptions}
-          value={formData.game}
-          isSearchable={true}
-          className="text-black"
-          onChange={(option, action) => handleSelectChange(option, action)}
-        />
-        <label htmlFor="players">Players</label>
-        <Select
-          id="players"
-          name="players"
-          options={playerOptions}
-          value={formData.players}
-          isMulti={true}
-          isSearchable={true}
-          isLoading={isLoading}
-          className="text-black"
-          onChange={(option, action) => handleSelectChange(option, action)}
-        />
-        <label htmlFor="winners">Winners</label>
-        <Select
-          id="winners"
-          name="winners"
-          options={winnerOptions}
-          value={formData.winners}
-          isMulti={true}
-          isSearchable={true}
-          isDisabled={formData.players.length === 0 ? true : false}
-          className="text-black"
-          onChange={(option, action) => handleSelectChange(option, action)}
-        />
-        <div className="mt-2 grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
-            onClick={handleReset}
-          >
-            Reset
-          </button>
-          <button
-            type="submit"
-            className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </>
+    <form className="space-y-2" onSubmit={handleSubmit}>
+      <FormInput
+        type="date"
+        name="date"
+        value={formData.date}
+        handleChange={handleInputChange}
+      />
+      <label htmlFor="game">Game</label>
+      <Select
+        inputId="game"
+        name="game"
+        options={gameOptions}
+        value={formData.game}
+        isSearchable={true}
+        className="text-black"
+        onChange={(option, action) => handleSelectChange(option, action)}
+      />
+      <label htmlFor="players">Players</label>
+      <Select
+        inputId="players"
+        name="players"
+        options={playerOptions}
+        value={formData.players}
+        isMulti={true}
+        isSearchable={true}
+        isLoading={isLoading}
+        className="text-black"
+        onChange={(option, action) => handleSelectChange(option, action)}
+      />
+      <label htmlFor="winners">Winners</label>
+      <Select
+        inputId="winners"
+        name="winners"
+        options={winnerOptions}
+        value={formData.winners}
+        isMulti={true}
+        isSearchable={true}
+        isDisabled={formData.players.length === 0 ? true : false}
+        className="text-black"
+        onChange={(option, action) => handleSelectChange(option, action)}
+      />
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
+          onClick={handleReset}
+        >
+          Reset
+        </button>
+        <button
+          type="submit"
+          className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
   )
 }
 

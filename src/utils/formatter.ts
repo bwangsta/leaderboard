@@ -20,7 +20,7 @@ export function formatDatePicker(date: Date) {
   return `${year?.value}-${month?.value}-${day?.value}`
 }
 
-export function toTitleCase(name: string, delimiter: string = " ") {
+export function toTitleCase(name: string, delimiter = " ") {
   const words = name.split(delimiter)
   const newName = words
     .map((word) => word[0].toUpperCase() + word.substring(1))
@@ -28,7 +28,7 @@ export function toTitleCase(name: string, delimiter: string = " ") {
   return newName
 }
 
-export function toKebabCase(name: string, delimiter: string = " ") {
+export function toKebabCase(name: string, delimiter = " ") {
   const words = name.toLowerCase().split(delimiter)
   const newName = words.join("-")
   return newName

@@ -61,44 +61,41 @@ function AddPlayer({ closeModal }: AddPlayerProps) {
   }
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold">Add Player</h1>
-      <form className="space-y-2" onSubmit={handleSubmit}>
-        <FormInput
-          name="username"
-          type="text"
-          value={formData.username}
-          handleChange={handleInputChange}
-        />
-        <FormInput
-          name="first_name"
-          type="text"
-          value={formData.first_name}
-          handleChange={handleInputChange}
-        />
-        <FormInput
-          name="last_name"
-          type="text"
-          value={formData.last_name}
-          handleChange={handleInputChange}
-        />
-        <div className="mt-2 grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
-            onClick={handleReset}
-          >
-            Reset
-          </button>
-          <button
-            type="submit"
-            className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+    <form className="space-y-2" onSubmit={handleSubmit}>
+      <FormInput
+        name="username"
+        type="text"
+        value={formData.username}
+        handleChange={handleInputChange}
+      />
+      <FormInput
+        name="first_name"
+        type="text"
+        value={formData.first_name}
+        handleChange={handleInputChange}
+      />
+      <FormInput
+        name="last_name"
+        type="text"
+        value={formData.last_name}
+        handleChange={handleInputChange}
+      />
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
+          onClick={handleReset}
+        >
+          Reset
+        </button>
+        <button
+          type="submit"
+          className="rounded-lg bg-blue-400 px-2 py-1 focus-visible:outline-transparent"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
   )
 }
 
