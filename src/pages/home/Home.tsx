@@ -1,11 +1,12 @@
+import { useQuery } from "@tanstack/react-query"
+import { Link } from "react-router-dom"
 import Table from "../../components/Table"
 import { getMatches, getRankings } from "../../services/api"
 import GameItem from "./GameItem"
 import AccordionPanel from "../../components/AccordionPanel"
-import { Link } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query"
 import Loader from "../../components/Loader"
 import ErrorMessage from "../../components/ErrorMessage"
+import Header from "../../components/Header"
 
 function Home() {
   const playerHeaders = ["Rank", "Username", "Wins", "Losses", "Win Rate"]
@@ -51,7 +52,8 @@ function Home() {
         ))}
       </div>
 
-      <Table title="Player Rankings" headers={playerHeaders}>
+      <Header>Player Rankings</Header>
+      <Table headers={playerHeaders}>
         {rankings?.map((player, index) => {
           return (
             <tr key={player._id} className="odd:bg-slate-700 even:bg-slate-900">
@@ -72,7 +74,7 @@ function Home() {
         })}
       </Table>
 
-      <h1 className="my-4 text-left text-3xl font-bold">Recent Matches</h1>
+      <Header>Recent Matches</Header>
       {matches?.map((match) => {
         return <AccordionPanel key={match._id} match={match} />
       })}

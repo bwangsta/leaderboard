@@ -3,6 +3,7 @@ import { getMatches } from "../../services/api"
 import AccordionPanel from "../../components/AccordionPanel"
 import Loader from "../../components/Loader"
 import ErrorMessage from "../../components/ErrorMessage"
+import Header from "../../components/Header"
 
 function MatchesPage() {
   const {
@@ -24,7 +25,7 @@ function MatchesPage() {
 
   return (
     <>
-      <h1 className="my-4 text-3xl font-bold">All Matches</h1>
+      <Header>All Matches</Header>
       {matches?.map((match) => {
         return <AccordionPanel key={match._id} match={match} />
       })}

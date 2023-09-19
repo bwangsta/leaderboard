@@ -1,10 +1,11 @@
+import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 import Table from "../../components/Table"
 import AccordionPanel from "../../components/AccordionPanel"
 import { getGameMatches, getGameRankings } from "../../services/api"
-import { useQuery } from "@tanstack/react-query"
 import Loader from "../../components/Loader"
 import ErrorMessage from "../../components/ErrorMessage"
+import Header from "../../components/Header"
 
 function GamePage() {
   const { gameName } = useParams()
@@ -67,7 +68,7 @@ function GamePage() {
         })}
       </Table>
 
-      <h1 className="my-4 text-3xl font-bold">Matches</h1>
+      <Header>Matches</Header>
       {matches?.map((match) => {
         return <AccordionPanel key={match._id} match={match} />
       })}

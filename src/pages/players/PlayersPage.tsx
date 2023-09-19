@@ -3,6 +3,7 @@ import { getPlayers } from "../../services/api"
 import { useQuery } from "@tanstack/react-query"
 import Loader from "../../components/Loader"
 import ErrorMessage from "../../components/ErrorMessage"
+import Header from "../../components/Header"
 
 function PlayersPage() {
   const {
@@ -24,7 +25,7 @@ function PlayersPage() {
 
   return (
     <>
-      <h1 className="my-4 text-left text-3xl font-bold">All Players</h1>
+      <Header>All Players</Header>
       <div className="grid grid-cols-fluid gap-2">
         {players?.map((player) => {
           return (

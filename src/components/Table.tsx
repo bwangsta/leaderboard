@@ -1,21 +1,19 @@
-import TableHeader from "./TableHeader"
-
 type TableProps = {
-  title?: string
   headers: string[]
   children: React.ReactNode
 }
 
-function Table({ title, headers, children }: TableProps) {
+function Table({ headers, children }: TableProps) {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-lg">
       <table className="mx-auto w-full max-w-7xl table-auto border-collapse text-left">
-        {title && (
-          <caption className="my-4 text-left text-3xl font-bold">
-            {title}
-          </caption>
-        )}
-        <TableHeader headers={headers} />
+        <thead className="bg-slate-900">
+          <tr className="text-lg font-bold">
+            {headers.map((header) => {
+              return <th key={header as React.Key}>{header}</th>
+            })}
+          </tr>
+        </thead>
         <tbody>{children}</tbody>
       </table>
     </div>
