@@ -36,6 +36,22 @@ export async function postMatch(formData: MatchFormData) {
   }
 }
 
+export async function updateMatch(formData: Match) {
+  try {
+    const response = await fetch(`${BASE_API_URL}/matches/${formData._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+    const data: Match = await response.json()
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export async function postPlayer(formData: PlayerFormData) {
   try {
     const response = await fetch(`${BASE_API_URL}/players`, {

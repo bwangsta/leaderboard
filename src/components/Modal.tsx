@@ -27,7 +27,7 @@ function Modal({ title, render }: ModalProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <DropdownMenuItem
-          className="flex cursor-pointer items-center gap-2 rounded-lg p-4 hover:bg-blue-400"
+          className="flex cursor-pointer items-center gap-2 p-4 focus-visible:bg-blue-400"
           onSelect={(e) => e.preventDefault()}
         >
           {title === "Add Player" ? (

@@ -1,9 +1,18 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
+import {
+  FaCrown,
+  FaChevronDown,
+  FaChevronUp,
+  FaRegUser,
+  FaEllipsisV,
+} from "react-icons/fa"
+import Table from "./Table"
+import Modal from "./Modal"
+import EditMatch from "../pages/matches/EditMatch"
+import Dropdown from "./Dropdown"
 import { Match } from "../types"
 import { formatDate, toTitleCase } from "../utils/formatter"
-import { FaCrown, FaChevronDown, FaChevronUp, FaRegUser } from "react-icons/fa"
-import Table from "./Table"
-import { Link } from "react-router-dom"
 
 type AccordionPanelProps = {
   match: Match
@@ -25,7 +34,7 @@ function AccordionPanel({
   return (
     <div className="my-1 overflow-hidden rounded-lg">
       <div
-        className={`grid items-center gap-2 ${backgroundColor} p-4 sm:grid-cols-[10ch_1fr_1fr_1fr_1rem]`}
+        className={`grid items-center gap-2 ${backgroundColor} p-4 sm:grid-cols-[10ch_1fr_1fr_1fr_2rem_1rem]`}
       >
         <p>{formatDate(match.date)}</p>
         <p className="text-2xl font-semibold sm:text-base">{match.game}</p>
@@ -44,7 +53,7 @@ function AccordionPanel({
         <div className="grid grid-cols-2 gap-1">
           {match.players.map((player) => {
             return (
-              <div key={player.username} className="flex items-center gap-1">
+              <div key={player.player_id} className="flex items-center gap-1">
                 <FaRegUser />
                 <Link
                   to={`/players/${player.player_id}`}
@@ -56,6 +65,14 @@ function AccordionPanel({
             )
           })}
         </div>
+        <Dropdown buttonIcon={<FaEllipsisV />}>
+          <Modal
+            title="Edit Match"
+            render={(closeModal) => (
+              <EditMatch closeModal={closeModal} match={match} />
+            )}
+          />
+        </Dropdown>
         <button
           type="button"
           onClick={() => setIsActive((prevIsActive) => !prevIsActive)}

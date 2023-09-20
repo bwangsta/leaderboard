@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom"
+import { FaChevronDown, FaPlus } from "react-icons/fa"
 import Dropdown from "./Dropdown"
+import Modal from "./Modal"
+import AddMatch from "../pages/matches/AddMatch"
+import AddPlayer from "../pages/players/AddPlayer"
 
 function Navbar() {
   return (
@@ -15,7 +19,23 @@ function Navbar() {
           <Link to={"/players"}>Players</Link>
         </li>
         <li>
-          <Dropdown />
+          <Dropdown
+            buttonIcon={
+              <>
+                <FaPlus />
+                <FaChevronDown size={12} />
+              </>
+            }
+          >
+            <Modal
+              title="Add Match"
+              render={(closeModal) => <AddMatch closeModal={closeModal} />}
+            />
+            <Modal
+              title="Add Player"
+              render={(closeModal) => <AddPlayer closeModal={closeModal} />}
+            />
+          </Dropdown>
         </li>
       </ul>
     </nav>
