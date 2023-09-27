@@ -52,6 +52,21 @@ export async function updateMatch(formData: Match) {
   }
 }
 
+export async function deleteMatch(id: string) {
+  try {
+    const response = await fetch(`${BASE_API_URL}/matches/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    const data: Match = await response.json()
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export async function postPlayer(formData: PlayerFormData) {
   try {
     const response = await fetch(`${BASE_API_URL}/players`, {

@@ -8,7 +8,7 @@ import {
   toKebabCase,
 } from "../../utils/formatter"
 import { getPlayers, updateMatch } from "../../services/api"
-import { Match, MatchFormData } from "../../types"
+import { Match } from "../../types"
 
 type EditMatchProps = {
   closeModal: () => void
@@ -37,7 +37,7 @@ function EditMatch({ closeModal, match }: EditMatchProps) {
   })
   const { mutate, error, isSuccess } = useMutation({
     mutationFn: updateMatch,
-    onSuccess: (data, variables) => handleMutationSuccess(data, variables),
+    onSuccess: (data) => handleMutationSuccess(data),
   })
   const [formData, setFormData] = useState<FormData>({
     _id: match._id,
@@ -62,10 +62,7 @@ function EditMatch({ closeModal, match }: EditMatchProps) {
     return { value: player.value, label: player.label }
   })
 
-  async function handleMutationSuccess(
-    data: Match | undefined,
-    variables: MatchFormData
-  ) {
+  async function handleMutationSuccess(data: Match | undefined) {
     queryClient.setQueryData<Match[] | undefined>(["matches"], (oldData) => {
       if (oldData) {
         const updatedData = oldData.filter((match) => match._id !== data?._id)
@@ -78,7 +75,7 @@ function EditMatch({ closeModal, match }: EditMatchProps) {
       exact: true,
     })
     await queryClient.invalidateQueries({
-      queryKey: ["matches", toKebabCase(variables.game)],
+      queryKey: ["matches", toKebabCase(match.game)],
       exact: true,
     })
     await queryClient.invalidateQueries({
@@ -86,7 +83,7 @@ function EditMatch({ closeModal, match }: EditMatchProps) {
       exact: true,
     })
     await queryClient.invalidateQueries({
-      queryKey: ["rankings", toKebabCase(variables.game)],
+      queryKey: ["rankings", toKebabCase(match.game)],
       exact: true,
     })
   }
@@ -131,7 +128,7 @@ function EditMatch({ closeModal, match }: EditMatchProps) {
   }
 
   if (isSuccess) {
-    console.log("Successfully added the match")
+    console.log("Successfully edited the match")
   }
 
   return (

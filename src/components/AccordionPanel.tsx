@@ -10,6 +10,7 @@ import {
 import Table from "./Table"
 import Modal from "./Modal"
 import EditMatch from "../pages/matches/EditMatch"
+import DeleteMatch from "../pages/matches/DeleteMatch"
 import Dropdown from "./Dropdown"
 import { Match } from "../types"
 import { formatDate, toTitleCase } from "../utils/formatter"
@@ -70,6 +71,12 @@ function AccordionPanel({
             title="Edit Match"
             render={(closeModal) => (
               <EditMatch closeModal={closeModal} match={match} />
+            )}
+          />
+          <Modal
+            title="Delete Match"
+            render={(closeModal) => (
+              <DeleteMatch match={match} closeModal={closeModal} />
             )}
           />
         </Dropdown>

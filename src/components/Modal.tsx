@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react"
-import { FaTimes, FaUserPlus, FaDice } from "react-icons/fa"
+import { FaTimes } from "react-icons/fa"
 import {
   Dialog,
   DialogTrigger,
@@ -27,15 +27,10 @@ function Modal({ title, render }: ModalProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <DropdownMenuItem
-          className="flex cursor-pointer items-center gap-2 p-4 focus-visible:bg-blue-400"
+          className="cursor-pointer p-4 focus-visible:bg-blue-400"
           onSelect={(e) => e.preventDefault()}
         >
-          {title === "Add Player" ? (
-            <FaUserPlus size={18} />
-          ) : (
-            <FaDice size={18} />
-          )}
-          <span>{title}</span>
+          {title}
         </DropdownMenuItem>
       </DialogTrigger>
       <DialogPortal>
