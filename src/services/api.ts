@@ -1,4 +1,5 @@
 import {
+  Games,
   Match,
   MatchFormData,
   Player,
@@ -151,6 +152,16 @@ export async function getGameMatches(game: string) {
   try {
     const response = await fetch(`${BASE_API_URL}/matches?game=${game}`)
     const data: Match[] = await response.json()
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function getGames() {
+  try {
+    const response = await fetch(`${BASE_API_URL}/games`)
+    const data: Games = await response.json()
     return data
   } catch (err) {
     console.log(err)

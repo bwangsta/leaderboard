@@ -13,7 +13,7 @@ function Dropdown({ buttonIcon, children }: DropdownProps) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-1 rounded-lg border-2 border-solid border-white p-2">
+        <button className="flex items-center justify-center gap-1 rounded-lg border-2 border-solid border-white p-2">
           {buttonIcon}
         </button>
       </DropdownMenuTrigger>

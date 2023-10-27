@@ -35,3 +35,7 @@ export type Rankings = {
   game: string
   rankings: Rank[]
 }
+
+export type Games = {
+  results: string[]
+}
